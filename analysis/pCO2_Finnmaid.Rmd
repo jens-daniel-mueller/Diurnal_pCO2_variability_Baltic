@@ -1,7 +1,7 @@
 ---
-title: "pCO2_Finnmaid"
-author: "jens-daniel-mueller"
-date: "2019-10-16"
+title: "Finnmaid pCO2"
+author: "Jens Daniel Mueller"
+date:  "`r format(Sys.time(), '%d %B, %Y')`"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
