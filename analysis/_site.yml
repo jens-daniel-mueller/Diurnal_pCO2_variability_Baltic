@@ -1,17 +1,17 @@
-name: "Diurnal_pCO2_variability_Baltic"
+name: Diurnal_pCO2_variability_Baltic
 output_dir: ../docs
 navbar:
-  title: "Diurnal_pCO2_variability_Baltic"
+  title: Diurnal pCO2 variability - Baltic Sea
   left:
   - text: Home
     href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: cosmo
+    theme: default
     highlight: textmate
