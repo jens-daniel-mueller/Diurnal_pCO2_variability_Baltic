@@ -5,13 +5,18 @@ navbar:
   left:
   - text: Home
     href: index.html
+  - text: Finnmaid pCO2
+    href: pCO2_Finnmaid.html
   right:
   - icon: fa-github
     text: Source code
     href: https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic
+  - icon: fa-home
+    text: Jens' homepage
+    href: https://jens-daniel-mueller.github.io/
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: default
+    theme: flatly
     highlight: textmate
