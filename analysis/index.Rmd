@@ -6,6 +6,8 @@ output:
     toc: false
 editor_options:
   chunk_output_type: console
+workflowr:
+  suppress_report: TRUE
 ---
 
 This website presents a first attempt to quantify the diurnal variability of CO~2~ system parameters from observations of an voluntary observing ship in the entrance to he Gulf of Finland (Baltic Sea).
