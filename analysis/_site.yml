@@ -5,8 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: Finnmaid pCO2
-    href: pCO2_Finnmaid.html
+  - text: Finnmaid
+    href: Finnmaid.html
   right:
   - icon: fa-github
     text: Source code
