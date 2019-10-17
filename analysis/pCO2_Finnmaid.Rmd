@@ -25,6 +25,8 @@ df <- df %>%
   filter(Area == "7.HGF") %>% 
   arrange(date_mean)
 
+knitr::include_graphics("docs/figure/Fig_4-4.tiff")
+
 ```
 
 # Calculating daily amplitudes
