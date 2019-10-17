@@ -9,16 +9,18 @@ workflowr:
   suppress_report: TRUE
 ---
 
-# Data base
+# Data base overview
 
 This analysis is based on pCO~2~ and SST observations from VOS Finnmaid, averaged for each crossing of previously defined sub-regions of the Baltic Sea (see [Schneider & Müller, 2018](https://www.springer.com/de/book/9783319616988)).
 The sub-region "7. HGF" in front of Helsinki is selected, because this sub-region is usually crossed in the morning (before arrival in Helsinki) and again in the evening of the same day (after departure from Helsinki), therefore allowing to investigate daytime variability. Mean CT values for each visit are calculated from measured pCO~2~, SST, and a fixed alkalinity (which impacts absolute CT values but not relative changes addressed here).
 
-```{r load-packages, message=FALSE, warning=FALSE}
+```{r time-series, message=FALSE, warning=FALSE, fig.height=3, fig.cap="Mean pCO~2~ and SST timeseries for HGF sub-region"}
 
 # load required packages
 library(tidyverse)
 library(lubridate)
+library(dygraphs)
+library(xts)
 
 # read data file
 df <- read_csv(here::here("/data", "Finnmaid_mean_area_CT_2019.csv"))
@@ -33,7 +35,36 @@ df <- df %>%
          week = week(date_mean),
          year = year(date_mean))
 
+# create xts object for dygraph plot
+
+ts <- xts(cbind(df$pCO2_mean,df$Tem_mean), order.by = df$date_mean)
+names(ts) <- c("pCO2", "Temp")
+
+ts %>% 
+  dygraph() %>% 
+  dyRangeSelector(dateWindow = c("2012-01-01", "2016-12-31")) %>% 
+  dySeries("pCO2", label = "pCO2") %>% 
+  dySeries("Temp", axis = 'y2', label = "SST") %>% 
+  dyAxis("y", label = "pCO2 [µatm]") %>% 
+  dyAxis("y2", label = "SST [deg C]") %>% 
+  dyOptions(drawPoints = TRUE, pointSize = 1)
+
+# ts$pCO2 %>% 
+#   dygraph(group = "ts_HGF") %>% 
+#   dyRangeSelector(dateWindow = c("2012-01-01", "2016-12-31")) %>% 
+#   dySeries("pCO2", label = "pCO2") %>% 
+#   dyAxis("y", label = "pCO2 [µatm]") %>% 
+#   dyOptions(drawPoints = TRUE, pointSize = 1)
+# 
+# ts$Temp %>% 
+#   dygraph(group = "ts_HGF") %>% 
+#   dyRangeSelector(dateWindow = c("2012-01-01", "2016-12-31")) %>% 
+#   dySeries("Temp", label = "SST") %>% 
+#   dyAxis("y", label = "SST [deg C]") %>% 
+#   dyOptions(drawPoints = TRUE, pointSize = 1)
+
 ```
+
 
 # Daily pCO~2~, CT and SST amplitudes
 
