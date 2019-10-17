@@ -7,10 +7,10 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Reading data file
+# Data base
 
-The data file contains Finnmaid observations averaged for each crossing of subregions of the Baltic Sea.
-The subregion "7. HGF" is selected, because this subregion is usually crossed in the morning (before arrival in Helsinki) and again in the evening of the same day (after departure from Helsinki), therefore allowing to test for daytime variability of CO~2~ observations.
+This analysis is based on pCO~2~ and SST observations from VOS Finnmaid, averaged for each crossing of subregions of the Baltic Sea.
+The subregion "7. HGF" in front of Helsinki is selected, because this subregion is usually crossed in the morning (before arrival in Helsinki) and again in the evening of the same day (after departure from Helsinki), therefore allowing to investigate daytime variability. Mean CT values for each visit are calculate from measured pCO~2~, SST, and a fixed alkalinity assumption (which impacts absolute CT values but not relative changes reported here).
 
 ```{r load-packages, message=FALSE, warning=FALSE}
 
@@ -23,21 +23,20 @@ df <- read_csv(here::here("/data", "Finnmaid_mean_area_CT_2019.csv"))
 
 df <- df %>% 
   filter(Area == "7.HGF") %>% 
-  arrange(date_mean)
-
-```
-
-# Calculating daily amplitudes
-
-
-```{r diurnal-changes}
-
-df <- df %>% 
-  mutate(day = yday(date_mean),
+  arrange(date_mean) %>% 
+    mutate(day = yday(date_mean),
          day_date = as.POSIXct(strptime(paste(2000,day), format = "%Y %j",tz="GMT")),
          hour = hour(date_mean),
          week = week(date_mean),
          year = year(date_mean))
+
+```
+
+# Daily pCO2, CT and SST amplitudes
+
+As a first step, observations are selected from all days where the subregion "7. HGF" was visited twice. pCO~2~, SST, CT and time differences between morning and evening visit of the subregion are calculated. Thereafter, daytime changes per hour are calculated for pCO~2~, SST, and CT.
+
+```{r diurnal-changes}
 
 diurnal <-
 df %>%
@@ -55,21 +54,6 @@ df %>%
          d_Tem_hour = d_Tem/d_time) %>% 
   ungroup()
 
-weekly <-
-  diurnal %>% 
-  group_by(week) %>% 
-  summarise(d_CT = mean(d_CT_hour),
-         d_CT_max = max(d_CT_hour),
-         d_CT_min = min(d_CT_hour),
-         d_Tem = mean(d_Tem_hour),
-         d_Tem_max = max(d_Tem_hour),
-         d_Tem_min = min(d_Tem_hour)) %>% 
-  ungroup()
-
-```
-
-```{r plots}
-
 
 
 ggplot(diurnal, aes(day, d_pCO2, fill=d_Tem_hour, size=d_time))+
@@ -80,8 +64,6 @@ ggplot(diurnal, aes(day, d_pCO2, fill=d_Tem_hour, size=d_time))+
                        name=expression(Delta~SST~(K~hr^{-1})))+
   labs(x="Day of year", y=expression(Delta~pCO2~(µatm)))+
   theme_bw()
-#ggsave("HGF_diurnal_dpCO2.pdf", width = 297, height = 210, units = "mm", dpi=300)
-
 
 
 ggplot(diurnal, aes(day, d_CT_hour, fill=d_Tem_hour, size=d_time))+
@@ -94,8 +76,24 @@ ggplot(diurnal, aes(day, d_CT_hour, fill=d_Tem_hour, size=d_time))+
                        name=expression(Delta~SST~(K~hr^{-1})))+
   labs(x="Day of year", y=expression(Delta~DIC~(µmol~kg^{-1}~hr^{-1})))+
   theme_bw()
-#ggsave("HGF_diurnal_dCT.pdf", width = 297, height = 210, units = "mm", dpi=300)
 
+
+```
+
+```{r plots}
+
+
+
+weekly <-
+  diurnal %>% 
+  group_by(week) %>% 
+  summarise(d_CT = mean(d_CT_hour),
+         d_CT_max = max(d_CT_hour),
+         d_CT_min = min(d_CT_hour),
+         d_Tem = mean(d_Tem_hour),
+         d_Tem_max = max(d_Tem_hour),
+         d_Tem_min = min(d_Tem_hour)) %>% 
+  ungroup()
 
 ggplot()+
   geom_hline(yintercept = 0)+
