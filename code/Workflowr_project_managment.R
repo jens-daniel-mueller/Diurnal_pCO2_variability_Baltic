@@ -37,10 +37,6 @@ wflow_status()
 wflow_publish(c("analysis/index.Rmd"),
               "Publish the initial files for myproject")
 
-## Step 1: Commits the 3 R Markdown files using the custom commit message
-## Step 2: Builds the HTML files using wflow_build()
-## Step 3: Commits the 3 HTML files plus the files that specify the style of the website (e.g. CSS and JavaScript files)
-
 # Deploy the website ------------------------------------------------------
 
 wflow_use_github("jens-daniel-mueller")
@@ -62,9 +58,19 @@ wflow_open("analysis/first-analysis.Rmd")
 # change: author: "Jens Daniel Mueller"
 # change: date:  "`r format(Sys.time(), '%d %B, %Y')`"
 
-wflow_build()
-wflow_publish("analysis/*", "surpressed report in index", republish = TRUE)
 
-wflow_publish(republish = TRUE, message="changed navbar link name") # for changes only in _site.yml
+# Repeated comments during work on the project ----------------------------
+
+# to check impact of latest updates
+wflow_build()
+
+# commit regular changes (locally) and rebuild site
+wflow_publish("analysis/*", message = "XXX")
+
+# commit changes including _site.yml (locally) and rebuild site
+wflow_publish(c("analysis/*"), message = "XXX", republish = TRUE)
+
+
+# Push latest version to GitHub
 wflow_git_push()
 jens-daniel-mueller
