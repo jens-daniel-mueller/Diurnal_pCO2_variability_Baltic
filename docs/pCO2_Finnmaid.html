@@ -512,10 +512,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerDiurnalpCO2variabilityBaltictree1f1b3918293d099e4aa1249318bd72a76cd8b598targetblank1f1b391a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/tree/1f1b3918293d099e4aa1249318bd72a76cd8b598" target="_blank">1f1b391</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerDiurnalpCO2variabilityBaltictree7b56d6ea01eeffc04f4d3c0a7f1227b906e7f21ctargetblank7b56d6ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/tree/7b56d6ea01eeffc04f4d3c0a7f1227b906e7f21c" target="_blank">7b56d6e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerDiurnalpCO2variabilityBaltictree1f1b3918293d099e4aa1249318bd72a76cd8b598targetblank1f1b391a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerDiurnalpCO2variabilityBaltictree7b56d6ea01eeffc04f4d3c0a7f1227b906e7f21ctargetblank7b56d6ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -524,10 +524,6 @@ Great! You are using Git for version control. Tracking code development and conn
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  docs/figure/Fig_4-4.jpg
-    Untracked:  docs/figure/Fig_4-4.tiff
 
 Unstaged changes:
     Modified:   code/Workflowr_project_managment.R
@@ -569,6 +565,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/blob/7b56d6ea01eeffc04f4d3c0a7f1227b906e7f21c/analysis/pCO2_Finnmaid.Rmd" target="_blank">7b56d6e</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2019-10-17
+</td>
+<td>
+reorganized presentation
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/2344accedd6ccfc4114af6434dd98726d7a8d932/docs/pCO2_Finnmaid.html" target="_blank">2344acc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2019-10-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -933,9 +963,9 @@ Add my first analysis
 </div>
 </div>
 </div>
-<div id="reading-data-file" class="section level1">
-<h1>Reading data file</h1>
-<p>The data file contains Finnmaid observations averaged for each crossing of subregions of the Baltic Sea. The subregion “7. HGF” is selected, because this subregion is usually crossed in the morning (before arrival in Helsinki) and again in the evening of the same day (after departure from Helsinki), therefore allowing to test for daytime variability of CO<sub>2</sub> observations.</p>
+<div id="data-base" class="section level1">
+<h1>Data base</h1>
+<p>This analysis is based on pCO<sub>2</sub> and SST observations from VOS Finnmaid, averaged for each crossing of subregions of the Baltic Sea. The subregion “7. HGF” in front of Helsinki is selected, because this subregion is usually crossed in the morning (before arrival in Helsinki) and again in the evening of the same day (after departure from Helsinki), therefore allowing to investigate daytime variability. Mean CT values for each visit are calculate from measured pCO<sub>2</sub>, SST, and a fixed alkalinity assumption (which impacts absolute CT values but not relative changes reported here).</p>
 <pre class="r"><code>library(tidyverse)
 library(lubridate)
 library(seacarb)
@@ -945,18 +975,17 @@ df &lt;- read_csv(here::here(&quot;/data&quot;, &quot;Finnmaid_mean_area_CT_2019
 
 df &lt;- df %&gt;% 
   filter(Area == &quot;7.HGF&quot;) %&gt;% 
-  arrange(date_mean)</code></pre>
-</div>
-<div id="calculating-daily-amplitudes" class="section level1">
-<h1>Calculating daily amplitudes</h1>
-<pre class="r"><code>df &lt;- df %&gt;% 
-  mutate(day = yday(date_mean),
+  arrange(date_mean) %&gt;% 
+    mutate(day = yday(date_mean),
          day_date = as.POSIXct(strptime(paste(2000,day), format = &quot;%Y %j&quot;,tz=&quot;GMT&quot;)),
          hour = hour(date_mean),
          week = week(date_mean),
-         year = year(date_mean))
-
-diurnal &lt;-
+         year = year(date_mean))</code></pre>
+</div>
+<div id="daily-pco2-ct-and-sst-amplitudes" class="section level1">
+<h1>Daily pCO2, CT and SST amplitudes</h1>
+<p>As a first step, observations are selected from all days where the subregion “7. HGF” was visited twice. pCO<sub>2</sub>, SST, CT and time differences between morning and evening visit of the subregion are calculated. Thereafter, daytime changes per hour are calculated for pCO<sub>2</sub>, SST, and CT.</p>
+<pre class="r"><code>diurnal &lt;-
 df %&gt;%
   add_count(year, day) %&gt;% 
   filter(n == 2) %&gt;% 
@@ -972,7 +1001,29 @@ df %&gt;%
          d_Tem_hour = d_Tem/d_time) %&gt;% 
   ungroup()
 
-weekly &lt;-
+
+
+ggplot(diurnal, aes(day, d_pCO2, fill=d_Tem_hour, size=d_time))+
+  geom_hline(yintercept = 0)+
+  geom_point(shape = 21)+
+  scale_size(name=&quot;Duration (hr)&quot;)+
+  scale_fill_gradient2(low = &quot;blue&quot;, high = &quot;red&quot;, mid = &quot;white&quot;,
+                       name=expression(Delta~SST~(K~hr^{-1})))+
+  labs(x=&quot;Day of year&quot;, y=expression(Delta~pCO2~(µatm)))+
+  theme_bw()</code></pre>
+<p><img src="figure/pCO2_Finnmaid.Rmd/diurnal-changes-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(diurnal, aes(day, d_CT_hour, fill=d_Tem_hour, size=d_time))+
+  geom_hline(yintercept = 0)+
+  geom_point(shape = 21)+
+  scale_size(name=&quot;Duration (hr)&quot;)+
+  # scale_fill_gradientn(colors = rev(brewer_pal(10,&quot;Spectral&quot;)),
+  #                      name=expression(Delta~SST~(K~hr^{-1})))+
+  scale_fill_gradient2(low = &quot;blue&quot;, high = &quot;red&quot;, mid = &quot;white&quot;,
+                       name=expression(Delta~SST~(K~hr^{-1})))+
+  labs(x=&quot;Day of year&quot;, y=expression(Delta~DIC~(µmol~kg^{-1}~hr^{-1})))+
+  theme_bw()</code></pre>
+<p><img src="figure/pCO2_Finnmaid.Rmd/diurnal-changes-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>weekly &lt;-
   diurnal %&gt;% 
   group_by(week) %&gt;% 
   summarise(d_CT = mean(d_CT_hour),
@@ -981,14 +1032,14 @@ weekly &lt;-
          d_Tem = mean(d_Tem_hour),
          d_Tem_max = max(d_Tem_hour),
          d_Tem_min = min(d_Tem_hour)) %&gt;% 
-  ungroup()</code></pre>
-<pre class="r"><code>ggplot(diurnal, aes(day, d_pCO2, fill=d_Tem_hour, size=d_time))+
+  ungroup()
+
+ggplot()+
   geom_hline(yintercept = 0)+
-  geom_point(shape = 21)+
-  scale_size(name=&quot;Duration (hr)&quot;)+
-  scale_fill_gradient2(low = &quot;blue&quot;, high = &quot;red&quot;, mid = &quot;white&quot;,
-                       name=expression(Delta~SST~(K~hr^{-1})))+
-  labs(x=&quot;Day of year&quot;, y=expression(Delta~pCO2~(µatm)))+
+  geom_point(data=weekly, aes(week, d_CT, fill=d_Tem), shape=21, size=3)+
+  geom_path(data=weekly, aes(week, d_CT))+
+  scale_fill_gradient2(low = &quot;blue&quot;, high = &quot;red&quot;, mid = &quot;white&quot;, name=expression(Mean~Delta~SST~(K~hr^{-1})))+
+  labs(x=&quot;Week of year&quot;, y=expression(Mean~Delta~DIC~(µmol~kg^{-1}~hr^{-1})))+
   theme_bw()</code></pre>
 <p><img src="figure/pCO2_Finnmaid.Rmd/plots-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -1015,107 +1066,18 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/blob/2344accedd6ccfc4114af6434dd98726d7a8d932/docs/figure/pCO2_Finnmaid.Rmd/plots-1.png" target="_blank">2344acc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2019-10-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/blob/7b64dfb3b3d9d3a0a2cd69f56565df5f6f20ab87/docs/figure/pCO2_Finnmaid.Rmd/plots-1.png" target="_blank">7b64dfb</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2019-10-17
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>#ggsave(&quot;HGF_diurnal_dpCO2.pdf&quot;, width = 297, height = 210, units = &quot;mm&quot;, dpi=300)
-
-
-
-ggplot(diurnal, aes(day, d_CT_hour, fill=d_Tem_hour, size=d_time))+
-  geom_hline(yintercept = 0)+
-  geom_point(shape = 21)+
-  scale_size(name=&quot;Duration (hr)&quot;)+
-  # scale_fill_gradientn(colors = rev(brewer_pal(10,&quot;Spectral&quot;)),
-  #                      name=expression(Delta~SST~(K~hr^{-1})))+
-  scale_fill_gradient2(low = &quot;blue&quot;, high = &quot;red&quot;, mid = &quot;white&quot;,
-                       name=expression(Delta~SST~(K~hr^{-1})))+
-  labs(x=&quot;Day of year&quot;, y=expression(Delta~DIC~(µmol~kg^{-1}~hr^{-1})))+
-  theme_bw()</code></pre>
-<p><img src="figure/pCO2_Finnmaid.Rmd/plots-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plots-2">
-Past versions of plots-2.png
-</button>
-</p>
-<div id="fig-plots-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/blob/7b64dfb3b3d9d3a0a2cd69f56565df5f6f20ab87/docs/figure/pCO2_Finnmaid.Rmd/plots-2.png" target="_blank">7b64dfb</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2019-10-17
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>#ggsave(&quot;HGF_diurnal_dCT.pdf&quot;, width = 297, height = 210, units = &quot;mm&quot;, dpi=300)
-
-
-ggplot()+
-  geom_hline(yintercept = 0)+
-  geom_point(data=weekly, aes(week, d_CT, fill=d_Tem), shape=21, size=3)+
-  geom_path(data=weekly, aes(week, d_CT))+
-  scale_fill_gradient2(low = &quot;blue&quot;, high = &quot;red&quot;, mid = &quot;white&quot;, name=expression(Mean~Delta~SST~(K~hr^{-1})))+
-  labs(x=&quot;Week of year&quot;, y=expression(Mean~Delta~DIC~(µmol~kg^{-1}~hr^{-1})))+
-  theme_bw()</code></pre>
-<p><img src="figure/pCO2_Finnmaid.Rmd/plots-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plots-3">
-Past versions of plots-3.png
-</button>
-</p>
-<div id="fig-plots-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/Diurnal_pCO2_variability_Baltic/blob/7b64dfb3b3d9d3a0a2cd69f56565df5f6f20ab87/docs/figure/pCO2_Finnmaid.Rmd/plots-3.png" target="_blank">7b64dfb</a>
 </td>
 <td>
 jens-daniel-mueller
