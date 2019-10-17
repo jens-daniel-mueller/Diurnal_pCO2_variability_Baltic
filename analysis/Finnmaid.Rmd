@@ -12,17 +12,18 @@ workflowr:
 # Data base
 
 This analysis is based on pCO~2~ and SST observations from VOS Finnmaid, averaged for each crossing of previously defined sub-regions of the Baltic Sea (see [Schneider & Müller, 2018](https://www.springer.com/de/book/9783319616988)).
-The sub-region "7. HGF" in front of Helsinki is selected, because this sub-region is usually crossed in the morning (before arrival in Helsinki) and again in the evening of the same day (after departure from Helsinki), therefore allowing to investigate daytime variability. Mean CT values for each visit are calculate from measured pCO~2~, SST, and a fixed alkalinity assumption (which impacts absolute CT values but not relative changes reported here).
+The sub-region "7. HGF" in front of Helsinki is selected, because this sub-region is usually crossed in the morning (before arrival in Helsinki) and again in the evening of the same day (after departure from Helsinki), therefore allowing to investigate daytime variability. Mean CT values for each visit are calculated from measured pCO~2~, SST, and a fixed alkalinity (which impacts absolute CT values but not relative changes addressed here).
 
 ```{r load-packages, message=FALSE, warning=FALSE}
 
+# load required packages
 library(tidyverse)
 library(lubridate)
-library(seacarb)
-library(scico)
 
+# read data file
 df <- read_csv(here::here("/data", "Finnmaid_mean_area_CT_2019.csv"))
 
+# filter and create relevant time columns
 df <- df %>% 
   filter(Area == "7.HGF") %>% 
   arrange(date_mean) %>% 
@@ -36,7 +37,7 @@ df <- df %>%
 
 # Daily pCO~2~, CT and SST amplitudes
 
-As a first step, observations are selected from all days, when the sub-region "7. HGF" was visited twice. pCO~2~, SST, CT and time differences between morning and evening visit of the sub-region are calculated. Thereafter, daytime changes per hour are calculated for pCO~2~, SST, and CT.
+As a first step, only observations from days, when the sub-region "7. HGF" was visited twice, are selected. pCO~2~, SST, CT and time differences between morning and evening visit of the sub-region are calculated. Thereafter, daytime changes per hour are calculated for pCO~2~, SST, and CT.
 
 ```{r calculate-diurnal-changes}
 
@@ -59,7 +60,7 @@ df %>%
 ```
 
 
-```{r plot-diurnal-pCO2, fig.cap="Diurnal pCO2 changes (evening-morning) over the course of the year, pooled for 2003-2019. Color indicates corresponding SST changes."}
+```{r plot-diurnal-pCO2, fig.cap="Diurnal pCO~2~ changes (evening-morning) over the course of the year, pooled for 2003-2019. Color indicates corresponding SST changes."}
 
 diurnal %>% 
 ggplot(aes(day_date, d_pCO2, fill=d_Tem_hour, size=d_time))+

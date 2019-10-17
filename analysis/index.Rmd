@@ -12,7 +12,7 @@ workflowr:
 
 This website presents a first attempt to quantify the diurnal variability of CO~2~ system parameters from observations of an voluntary observing ship in the entrance to he Gulf of Finland (Baltic Sea).
 
-Click on this [link](pCO2_Finnmaid.html) or navigate through the navbar to see first results.
+Click on this [link](Finnmaid.html) or navigate through the navbar to see first results.
 
 The source code for this analysis can be unfolded directly on the results page and is accessible through the GitHub repo link in the navbar.
 
